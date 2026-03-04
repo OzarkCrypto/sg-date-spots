@@ -4,176 +4,211 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SG Date Spots</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #F5F0E8; --dark: #1A1A1A; --accent: #E8604A;
-    --muted: #8A8070; --card-bg: #FFFFFF; --green: #4A7C59; --blue: #3D6A8A;
+    --bg: #0D0D0D;
+    --surface: #161616;
+    --border: #2A2A2A;
+    --text: #F0EDE8;
+    --muted: #6B6560;
+    --accent: #D4A853;
+    --accent-dim: rgba(212,168,83,0.12);
+    --green: #5A9E6F;
+    --green-dim: rgba(90,158,111,0.12);
+    --blue: #5B8DB8;
+    --blue-dim: rgba(91,141,184,0.12);
+    --red: #C4614A;
+    --red-dim: rgba(196,97,74,0.12);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--cream); color: var(--dark); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 1000; opacity: 0.4; }
-  header { padding: 48px 32px 32px; text-align: center; }
-  .eyebrow { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
-  h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.1; color: var(--dark); margin-bottom: 8px; }
-  h1 em { color: var(--accent); font-style: italic; }
-  .subtitle { color: var(--muted); font-size: 0.95rem; font-weight: 300; margin-top: 8px; }
-  .tabs { display: flex; justify-content: center; gap: 8px; padding: 24px 32px 0; flex-wrap: wrap; }
-  .tab { padding: 10px 22px; border-radius: 100px; border: 1.5px solid #D4C9B8; background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; color: var(--muted); transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; }
-  .tab:hover { border-color: var(--dark); color: var(--dark); transform: translateY(-1px); }
-  .tab.active { background: var(--dark); border-color: var(--dark); color: var(--cream); }
-  .main { max-width: 680px; margin: 40px auto; padding: 0 24px; }
-  .card-wrapper { position: relative; min-height: 420px; }
-  .card-stack { position: absolute; inset: 0; top: 12px; }
-  .card-stack::before { content: ''; position: absolute; inset: 0; background: #E8E0D4; border-radius: 20px; transform: rotate(2deg) translateY(6px); z-index: 0; }
-  .card-stack::after { content: ''; position: absolute; inset: 0; background: #EDE7DC; border-radius: 20px; transform: rotate(-1.5deg) translateY(3px); z-index: 1; }
-  .card { position: relative; z-index: 2; background: var(--card-bg); border-radius: 20px; padding: 40px; box-shadow: 0 8px 40px rgba(0,0,0,0.08); animation: cardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  @keyframes cardIn { from { opacity: 0; transform: scale(0.93) translateY(10px) rotate(-1deg); } to { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); } }
-  .card-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 100px; margin-bottom: 20px; }
-  .tag-indoor { background: #EDF4F0; color: var(--green); }
-  .tag-outdoor { background: #FFF3E0; color: #D4830A; }
-  .tag-restaurant { background: #FDF0EE; color: var(--accent); }
-  .tag-bar { background: #EEF2F8; color: var(--blue); }
-  .card-name { font-family: 'Playfair Display', serif; font-size: 2rem; line-height: 1.2; margin-bottom: 6px; color: var(--dark); }
-  .card-area { color: var(--muted); font-size: 0.88rem; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; }
-  .divider { height: 1px; background: linear-gradient(to right, #E8E0D4, transparent); margin: 20px 0; }
-  .card-desc { font-size: 0.95rem; line-height: 1.7; color: #555; margin-bottom: 24px; }
-  .card-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
-  .meta-item { display: flex; align-items: center; gap: 6px; font-size: 0.83rem; color: var(--muted); background: var(--cream); padding: 6px 12px; border-radius: 8px; }
-  .meta-item strong { color: var(--dark); font-weight: 500; }
-  .vibe-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
-  .vibe-tag { font-size: 0.78rem; padding: 4px 10px; border: 1px solid #E0D8CE; border-radius: 100px; color: var(--muted); }
-  .spin-btn { width: 100%; padding: 16px; background: var(--dark); color: var(--cream); border: none; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s ease; }
-  .spin-btn:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232, 96, 74, 0.3); }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
+  .wrap { width: 100%; max-width: 560px; padding: 0 20px 60px; position: relative; z-index: 1; }
+  header { padding: 52px 0 36px; text-align: center; }
+  .logo-mark { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .logo-mark::before, .logo-mark::after { content: ''; display: block; width: 24px; height: 1px; background: var(--border); }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 8vw, 4.5rem); font-weight: 400; line-height: 0.95; letter-spacing: -0.02em; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .tagline { margin-top: 14px; font-size: 0.83rem; color: var(--muted); font-weight: 300; letter-spacing: 0.05em; }
+  .cats { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 28px; }
+  .cat-btn { padding: 11px 6px; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 10px; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 400; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 5px; letter-spacing: 0.03em; }
+  .cat-btn .ico { font-size: 1.1rem; }
+  .cat-btn:hover { border-color: var(--accent); color: var(--text); }
+  .cat-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+  .cat-btn.active.green { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+  .cat-btn.active.blue  { background: var(--blue-dim);  border-color: var(--blue);  color: var(--blue); }
+  .cat-btn.active.red   { background: var(--red-dim);   border-color: var(--red);   color: var(--red); }
+  .card-area { position: relative; min-height: 400px; }
+  .card-area::before { content: ''; position: absolute; inset: 0; top: 8px; left: 6px; right: -6px; background: #111; border: 1px solid var(--border); border-radius: 18px; z-index: 0; }
+  .card-area::after  { content: ''; position: absolute; inset: 0; top: 4px; left: 3px; right: -3px; background: #141414; border: 1px solid var(--border); border-radius: 18px; z-index: 1; }
+  .card { position: relative; z-index: 2; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 32px; }
+  .loader { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 320px; gap: 16px; }
+  .loader.show { display: flex; }
+  .spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.05em; }
+  .card-content { display: none; }
+  .card-content.show { display: block; animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .card-type { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; padding: 4px 10px; border-radius: 6px; margin-bottom: 18px; }
+  .type-indoor     { background: var(--accent-dim); color: var(--accent); }
+  .type-outdoor    { background: var(--green-dim);  color: var(--green); }
+  .type-restaurant { background: var(--blue-dim);   color: var(--blue); }
+  .type-bar        { background: var(--red-dim);    color: var(--red); }
+  .card-name { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 600; line-height: 1.1; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .card-location { font-size: 0.82rem; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .map-link { color: var(--accent); text-decoration: none; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px; border: 1px solid rgba(212,168,83,0.3); padding: 2px 8px; border-radius: 5px; transition: all 0.15s; }
+  .map-link:hover { background: var(--accent-dim); border-color: var(--accent); }
+  .sep { height: 1px; background: var(--border); margin: 18px 0; }
+  .card-desc { font-size: 0.93rem; line-height: 1.75; color: #B8B0A5; margin-bottom: 22px; }
+  .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+  .meta-pill { font-size: 0.78rem; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); padding: 5px 11px; border-radius: 7px; display: flex; align-items: center; gap: 5px; }
+  .meta-pill strong { color: var(--text); font-weight: 400; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 26px; }
+  .tag { font-size: 0.72rem; color: var(--muted); border: 1px solid var(--border); padding: 3px 9px; border-radius: 100px; }
+  .spin-btn { width: 100%; padding: 15px; background: var(--accent); color: #0D0D0D; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 0.92rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; transition: all 0.2s; letter-spacing: 0.02em; }
+  .spin-btn:hover { background: #E0B660; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(212,168,83,0.25); }
   .spin-btn:active { transform: translateY(0); }
-  .spin-btn .dice { font-size: 1.2rem; transition: transform 0.3s ease; }
-  .spin-btn:hover .dice { transform: rotate(180deg); }
-  .count-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 8px; }
-  .count-label { font-size: 0.8rem; color: var(--muted); }
-  .count-dots { display: flex; gap: 5px; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: #D4C9B8; transition: all 0.2s ease; }
-  .dot.active { background: var(--dark); width: 18px; border-radius: 3px; }
-  footer { text-align: center; padding: 32px; color: var(--muted); font-size: 0.8rem; }
-  footer span { color: var(--accent); }
+  .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .spin-icon { font-size: 1rem; display: inline-block; transition: transform 0.4s; }
+  .spin-btn:not(:disabled):hover .spin-icon { transform: rotate(180deg); }
+  .error-state { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 320px; gap: 12px; text-align: center; }
+  .error-state.show { display: flex; }
+  .error-icon { font-size: 2rem; }
+  .error-msg { font-size: 0.85rem; color: var(--muted); max-width: 280px; line-height: 1.6; }
+  .retry-btn { margin-top: 8px; padding: 9px 20px; background: transparent; border: 1px solid var(--border); color: var(--text); border-radius: 8px; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.82rem; transition: all 0.2s; }
+  .retry-btn:hover { border-color: var(--accent); color: var(--accent); }
+  footer { margin-top: 32px; text-align: center; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.05em; }
 </style>
 </head>
 <body>
-<header>
-  <p class="eyebrow">Singapore</p>
-  <h1>Where to go<br><em>tonight?</em></h1>
-  <p class="subtitle">Pick a vibe, spin the wheel</p>
-</header>
-<div class="tabs">
-  <button class="tab active" onclick="setCategory('indoor')" id="tab-indoor"><span>indoor</span></button>
-  <button class="tab" onclick="setCategory('outdoor')" id="tab-outdoor"><span>outdoor</span></button>
-  <button class="tab" onclick="setCategory('restaurant')" id="tab-restaurant"><span>restaurant</span></button>
-  <button class="tab" onclick="setCategory('bar')" id="tab-bar"><span>bar</span></button>
-</div>
-<div class="main">
-  <div class="count-row">
-    <span class="count-label" id="count-label">1 of 5</span>
-    <div class="count-dots" id="count-dots"></div>
+<div class="wrap">
+  <header>
+    <div class="logo-mark">Singapore</div>
+    <h1>Where<br>to go <em>tonight?</em></h1>
+    <p class="tagline">Spin for your next date night</p>
+  </header>
+  <div class="cats">
+    <button class="cat-btn active" onclick="setCategory('indoor')" id="cat-indoor"><span class="ico">&#127963;&#65039;</span>Indoor</button>
+    <button class="cat-btn green"  onclick="setCategory('outdoor')" id="cat-outdoor"><span class="ico">&#127807;</span>Outdoor</button>
+    <button class="cat-btn blue"   onclick="setCategory('restaurant')" id="cat-restaurant"><span class="ico">&#127869;&#65039;</span>Restaurant</button>
+    <button class="cat-btn red"    onclick="setCategory('bar')" id="cat-bar"><span class="ico">&#127864;</span>Bar</button>
   </div>
-  <div class="card-wrapper">
-    <div class="card-stack"></div>
-    <div class="card" id="main-card"></div>
+  <div class="card-area">
+    <div class="card" id="card">
+      <div class="loader show" id="loader">
+        <div class="spinner"></div>
+        <span class="loader-text">Finding the perfect spot...</span>
+      </div>
+      <div class="error-state" id="error-state">
+        <div class="error-icon">&#9889;</div>
+        <p class="error-msg">Couldn't load a spot. Check your connection and try again.</p>
+        <button class="retry-btn" onclick="fetchSpot()">Try again</button>
+      </div>
+      <div class="card-content" id="card-content">
+        <div class="card-type" id="card-type"></div>
+        <div class="card-name" id="card-name"></div>
+        <div class="card-location" id="card-location"></div>
+        <div class="sep"></div>
+        <p class="card-desc" id="card-desc"></p>
+        <div class="meta-row" id="card-meta"></div>
+        <div class="tags" id="card-tags"></div>
+        <button class="spin-btn" id="spin-btn" onclick="fetchSpot()">
+          <span class="spin-icon">&#10022;</span> Show me another
+        </button>
+      </div>
+    </div>
   </div>
+  <footer>AI-powered &mdash; real spots, refreshed every spin</footer>
 </div>
-<footer>Made with <span>love</span> for SG date nights</footer>
 <script>
-const data = {
-  indoor: [
-    { name: "Cloud Forest", area: "Gardens by the Bay", desc: "Air-con paradise with a 35m indoor waterfall. One of the best photo spots in all of Singapore.", price: "SGD 53 (combo)", hours: "9AM - 9PM", vibes: ["romantic", "photo-worthy", "cool", "nature"] },
-    { name: "ArtScience Museum", area: "Marina Bay Sands", desc: "teamLab digital art exhibit. The Crystal Universe section guarantees amazing shots for both of you.", price: "SGD 19-25", hours: "10AM - 7PM", vibes: ["art", "instagrammable", "dreamy", "unique"] },
-    { name: "Flower Dome", area: "Gardens by the Bay", desc: "One of the world's largest glass greenhouses. Mediterranean plants and seasonal flowers - she'll love it.", price: "SGD 53 (combo)", hours: "9AM - 9PM", vibes: ["flowers", "romantic", "cool", "beautiful"] },
-    { name: "Motion Art Space", area: "Arab Street", desc: "Make your own spin art on a spinning canvas. Take the artwork home as a keepsake together.", price: "SGD 45/pax", hours: "10AM - 7PM", vibes: ["hands-on", "couple activity", "unique", "keepsake"] },
-    { name: "National Museum of Singapore", area: "Dhoby Ghaut", desc: "Singapore's national museum. Permanent galleries are free. Great air-con and lots to see.", price: "Free (permanent)", hours: "10AM - 7PM", vibes: ["culture", "free", "air-con", "history"] }
-  ],
-  outdoor: [
-    { name: "Marina Bay Promenade", area: "Marina Bay", desc: "MBS, Singapore Flyer, and the CBD skyline all in one view. Magical at golden hour and even better at night.", price: "Free", hours: "24hrs", vibes: ["skyline", "walking", "romantic", "free"] },
-    { name: "Sentosa Tanjong Beach", area: "Sentosa Island", desc: "Singapore's most laid-back beach. Quiet enough to just sit with drinks and watch the sunset together.", price: "Free (transport extra)", hours: "24hrs", vibes: ["beach", "chill", "quiet", "sunset"] },
-    { name: "Henderson Waves", area: "Telok Blangah", desc: "Singapore's highest pedestrian bridge. Go around golden hour - the warm lighting transforms the whole place.", price: "Free", hours: "24hrs", vibes: ["skyline", "walk", "free", "unique"] },
-    { name: "Fort Canning Park", area: "Dhoby Ghaut", desc: "Historic hilltop park. Quiet and atmospheric in the evenings with great backdrops for photos.", price: "Free", hours: "24hrs", vibes: ["history", "walk", "quiet", "photo spots"] },
-    { name: "Southern Ridges", area: "Telok Blangah", desc: "9km nature trail connecting to Henderson Waves. Go after 5pm for cool breezes and forest vibes.", price: "Free", hours: "24hrs", vibes: ["trekking", "nature", "free", "adventure"] }
-  ],
-  restaurant: [
-    { name: "Merci Marcel", area: "Orchard / Tiong Bahru", desc: "French all-day cafe from brunch to dinner. Romantic outdoor seating. The ravioli and steak are incredible. 4.7", price: "SGD 30-50/pax", hours: "8AM - 10:30PM", vibes: ["french", "brunch", "al fresco", "vibes"] },
-    { name: "Sol & Luna", area: "CapitaSpring 17F", desc: "17th floor restaurant with CBD views. Fresh pasta is the signature. Happy Hour 4-8pm for wine and beer. 4.2", price: "SGD 50-80/pax", hours: "11AM - 11PM", vibes: ["CBD view", "italian", "romantic", "happy hour"] },
-    { name: "Marguerite", area: "Flower Dome, Gardens by the Bay", desc: "Michelin star restaurant inside the Flower Dome. Dining surrounded by a garden. Perfect for special occasions. 4.6", price: "SGD 150+/pax", hours: "Thu-Sun lunch/dinner", vibes: ["michelin", "fine dining", "special occasion", "garden view"] },
-    { name: "Brunches Cafe", area: "Rangoon Road", desc: "Retro all-day brunch cafe. Great value and atmosphere. Occasional live music. 4.7", price: "SGD 25-40/pax", hours: "10AM - 10PM", vibes: ["retro", "brunch", "value", "atmosphere"] },
-    { name: "Odette", area: "National Gallery", desc: "One of Singapore's finest dining experiences. Michelin 3-star. The ultimate choice for a special anniversary.", price: "SGD 250+/pax", hours: "Tue-Sat lunch/dinner", vibes: ["michelin 3-star", "fine dining", "anniversary", "french"] }
-  ],
-  bar: [
-    { name: "VUE", area: "OUE Bayfront 19F", desc: "360-degree Marina Bay views from a rooftop bar. Cocktails with the skyline. Best couple bar in the city. 4.7", price: "SGD 20-30/drink", hours: "Mon-Sat from 5:30PM", vibes: ["rooftop", "skyline", "cocktails", "romantic"] },
-    { name: "Atlas Bar", area: "Bugis", desc: "Art deco masterpiece with 1,000+ gin collection. The space itself is art - incredible photos guaranteed. 4.6", price: "SGD 22-35/drink", hours: "Mon-Sat from 3PM", vibes: ["art deco", "gin bar", "classic", "photo spot"] },
-    { name: "Ce La Vi", area: "Marina Bay Sands 57F", desc: "Club & bar next to the MBS infinity pool on the 57th floor. Best views in Singapore. Smart casual dress code.", price: "SGD 25-40/drink", hours: "6PM - late", vibes: ["MBS views", "club", "skyline", "dress up"] },
-    { name: "Smoke & Mirrors", area: "National Gallery 6F", desc: "Rooftop bar on the National Gallery. Padang lawn and CBD views simultaneously. Great cocktails, less crowded. 4.5", price: "SGD 20-30/drink", hours: "Tue-Sun from 5PM", vibes: ["rooftop", "cocktails", "views", "less crowded"] },
-    { name: "Jigger & Pony", area: "Amara Hotel", desc: "Asia's 50 Best Bars perennial. Classic cocktail specialists. Understated but serious about craft. 4.6", price: "SGD 22-32/drink", hours: "Tue-Sun from 5PM", vibes: ["classic cocktails", "best bars asia", "craft", "sophisticated"] }
-  ]
+let currentCategory = 'indoor';
+let recentNames = [];
+const MAX_RECENT = 12;
+
+const categoryColors = { indoor: 'type-indoor', outdoor: 'type-outdoor', restaurant: 'type-restaurant', bar: 'type-bar' };
+const categoryLabels = { indoor: 'Indoor Activity', outdoor: 'Outdoor Activity', restaurant: 'Restaurant', bar: 'Bar' };
+const categoryPrompts = {
+  indoor: 'indoor activities, museums, galleries, escape rooms, entertainment venues, karaoke, arcades, spas, wellness studios, cultural centres, cinemas, art installations, science centres, hands-on workshops',
+  outdoor: 'outdoor activities, parks, beaches, nature trails, waterfronts, rooftop gardens, cycling routes, outdoor markets, viewpoints, open-air attractions, boat tours, gardens',
+  restaurant: 'restaurants, cafes, outstanding hawker stalls, fine dining, bistros, brunch spots, dessert cafes, omakase, themed restaurants, hidden gems',
+  bar: 'cocktail bars, rooftop bars, speakeasies, wine bars, craft beer bars, jazz bars, hotel bars, nightclubs, lounge bars, sake bars, whisky bars'
 };
-
-let currentCategory = 'indoor', currentIndex = 0, shuffled = [];
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
 function setCategory(cat) {
   currentCategory = cat;
-  currentIndex = 0;
-  shuffled = shuffle(data[cat]);
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + cat).classList.add('active');
-  renderCard();
-  renderDots();
+  recentNames = [];
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('cat-' + cat).classList.add('active');
+  fetchSpot();
 }
 
-function nextCard() {
-  currentIndex = (currentIndex + 1) % shuffled.length;
-  renderCard();
-  renderDots();
+function showLoader() {
+  document.getElementById('loader').classList.add('show');
+  document.getElementById('card-content').classList.remove('show');
+  document.getElementById('error-state').classList.remove('show');
+  var btn = document.getElementById('spin-btn');
+  if (btn) btn.disabled = true;
 }
 
-function renderDots() {
-  const dots = document.getElementById('count-dots');
-  dots.innerHTML = '';
-  for (let i = 0; i < shuffled.length; i++) {
-    const d = document.createElement('div');
-    d.className = 'dot' + (i === currentIndex ? ' active' : '');
-    dots.appendChild(d);
+function showError() {
+  document.getElementById('loader').classList.remove('show');
+  document.getElementById('card-content').classList.remove('show');
+  document.getElementById('error-state').classList.add('show');
+}
+
+function showCard(spot) {
+  var typeEl = document.getElementById('card-type');
+  typeEl.className = 'card-type ' + categoryColors[currentCategory];
+  typeEl.textContent = categoryLabels[currentCategory];
+  document.getElementById('card-name').textContent = spot.name;
+  var mapUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(spot.name + ' Singapore');
+  document.getElementById('card-location').innerHTML = '<span>&#128205; ' + spot.area + '</span><a class="map-link" href="' + mapUrl + '" target="_blank" rel="noopener">&#8599; Google Maps</a>';
+  document.getElementById('card-desc').textContent = spot.description;
+  var metaEl = document.getElementById('card-meta');
+  metaEl.innerHTML = '';
+  if (spot.price) metaEl.innerHTML += '<div class="meta-pill">&#128176; <strong>' + spot.price + '</strong></div>';
+  if (spot.hours) metaEl.innerHTML += '<div class="meta-pill">&#128336; <strong>' + spot.hours + '</strong></div>';
+  if (spot.rating) metaEl.innerHTML += '<div class="meta-pill">&#11088; <strong>' + spot.rating + '</strong></div>';
+  var tagsEl = document.getElementById('card-tags');
+  tagsEl.innerHTML = (spot.vibes || []).map(function(v) { return '<span class="tag">' + v + '</span>'; }).join('');
+  document.getElementById('loader').classList.remove('show');
+  document.getElementById('error-state').classList.remove('show');
+  document.getElementById('card-content').classList.add('show');
+  var btn = document.getElementById('spin-btn');
+  if (btn) btn.disabled = false;
+}
+
+async function fetchSpot() {
+  showLoader();
+  var avoidList = recentNames.length > 0 ? 'Do NOT suggest any of these recently shown places: ' + recentNames.join(', ') + '.' : '';
+  var prompt = 'You are a Singapore local who knows every great date spot in the city.\nSuggest ONE real, currently open Singapore ' + categoryPrompts[currentCategory] + ' that would be great for a couple on a date.\n\nSTRICT RULES:\n- The place MUST be currently open and operating in Singapore in 2025. NEVER suggest permanently closed venues.\n- Vary widely across different neighbourhoods, price points, and vibes each time.\n- ' + avoidList + '\n- Be accurate about pricing, hours, and location.\n\nRespond ONLY with valid JSON, no markdown, no extra text:\n{\n  "name": "Exact venue name",\n  "area": "Neighbourhood or district",\n  "description": "2-3 sentences casual honest tone. Why great for a date?",\n  "price": "e.g. SGD 20-40/pax or Free",\n  "hours": "e.g. Tue-Sun 5PM-midnight",\n  "rating": "Google rating if confident e.g. 4.6, else empty string",\n  "vibes": ["tag1", "tag2", "tag3", "tag4"]\n}';
+
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if (!res.ok) throw new Error('API ' + res.status);
+    var data = await res.json();
+    var raw = data.content[0].text.trim().replace(/```json|```/g, '').trim();
+    var spot = JSON.parse(raw);
+    recentNames.push(spot.name);
+    if (recentNames.length > MAX_RECENT) recentNames.shift();
+    showCard(spot);
+  } catch(e) {
+    console.error(e);
+    showError();
   }
-  document.getElementById('count-label').textContent = (currentIndex + 1) + ' of ' + shuffled.length;
 }
 
-const tagClass = { indoor: 'tag-indoor', outdoor: 'tag-outdoor', restaurant: 'tag-restaurant', bar: 'tag-bar' };
-const tagLabel = { indoor: 'Indoor Activity', outdoor: 'Outdoor Activity', restaurant: 'Restaurant', bar: 'Bar' };
-
-function renderCard() {
-  const spot = shuffled[currentIndex];
-  const card = document.getElementById('main-card');
-  card.style.animation = 'none';
-  card.offsetHeight;
-  card.style.animation = '';
-  card.innerHTML =
-    '<div class="card-tag ' + tagClass[currentCategory] + '">' + tagLabel[currentCategory] + '</div>' +
-    '<div class="card-name">' + spot.name + '</div>' +
-    '<div class="card-area">@ ' + spot.area + '</div>' +
-    '<div class="divider"></div>' +
-    '<p class="card-desc">' + spot.desc + '</p>' +
-    '<div class="card-meta">' +
-      '<div class="meta-item">$ <strong>' + spot.price + '</strong></div>' +
-      '<div class="meta-item">Hours: <strong>' + spot.hours + '</strong></div>' +
-    '</div>' +
-    '<div class="vibe-tags">' + spot.vibes.map(v => '<span class="vibe-tag">' + v + '</span>').join('') + '</div>' +
-    '<button class="spin-btn" onclick="nextCard()"><span class="dice">&#127922;</span> Show me another</button>';
-}
-
-setCategory('indoor');
+fetchSpot();
 </script>
 </body>
 </html>
